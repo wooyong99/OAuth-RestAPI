@@ -27,7 +27,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         User user = (User) customUserDetailsService.loadUserByUsername(email);
 
         if(!(user.getUsername().equals(email) && passwordEncoder.matches(password, user.getPassword()))){
-            System.out.println("Provider 실패");
             throw new BaseException(POST_PASSWORD_INCORRECT);
         }
         return new UsernamePasswordAuthenticationToken(user, password);

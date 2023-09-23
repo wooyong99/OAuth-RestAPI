@@ -11,11 +11,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.example.jwy.DTO.Response.ResponseStatus.LOGIN_FAIL;
-import static com.example.jwy.DTO.Response.ResponseStatus.SIGNUP_DUPLI_MEMBER;
+import static com.example.jwy.DTO.Response.ResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +48,13 @@ public class MemberService {
             SecurityContextHolder.setContext(sc);
 
             token = jwtTokenProvider.createToken(loginDTO.getEmail(),loginDTO.getPassword());
-        }catch(Exception e){
+        }catch(UsernameNotFoundException e){
+            throw new BaseException(NOT_FOUND_MEMBER);
+        } catch(Exception e){
             e.printStackTrace();
+            if(e.getMessage().equals("비밀번호가 틀렸습니다.")){
+                throw new BaseException(POST_PASSWORD_INCORRECT);
+            }
             throw new BaseException(LOGIN_FAIL);
         }
 
