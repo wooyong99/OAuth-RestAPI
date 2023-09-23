@@ -17,13 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer(){
-//        return (web) -> {
-//            web.ignoring().requestMatchers("/usr/signup");
-//        };
-//    }
-
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
@@ -33,7 +26,7 @@ public class SecurityConfig {
                 .httpBasic( h -> h.disable())
                 // WebSecurity 설정 방식
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/usr/signup").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(
                         oauth2Config -> oauth2Config

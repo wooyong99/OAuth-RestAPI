@@ -9,7 +9,11 @@ public enum ResponseStatus {
     SIGNUP_SUCCESS(true, HttpStatus.OK.value(),"회원가입에 성공하였습니다"),
     SIGNUP_PASSWORD_DIFF(false, HttpStatus.BAD_REQUEST.value(), "비밀번호 확인 값이 다릅니다. 다시 입력해주세요."),
     SIGNUP_PW_INVALID(false, HttpStatus.BAD_REQUEST.value(), "비밀번호 형식이 올바르지 않습니다."),
-    SIGNUP_EMAIL_INVALID(false, HttpStatus.BAD_REQUEST.value(), "이메일 형식이 올바르지 않습니다.");
+    SIGNUP_EMAIL_INVALID(false, HttpStatus.BAD_REQUEST.value(), "이메일 형식이 올바르지 않습니다."),
+    UNEXPECTED_ERROR(false, HttpStatus.BAD_REQUEST.value(), "예상치 못한 에러가 발생했습니다."),
+    POST_PASSWORD_INCORRECT(false, HttpStatus.BAD_REQUEST.value(), "비밀번호가 틀렸습니다."),
+    LOGIN_FAIL(false, HttpStatus.BAD_REQUEST.value(), "로그인에 실패했습니다."),
+    SIGNUP_DUPLI_MEMBER(false,HttpStatus.BAD_REQUEST.value(), "이미 사용중인 Email입니다.");
 
     private final boolean isSuccess;
         private final int code;

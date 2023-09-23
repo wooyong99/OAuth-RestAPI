@@ -13,7 +13,7 @@ public class createMemberData {
     public ApplicationRunner init(MemberService memberService){
         return e -> {
             IntStream.rangeClosed(1,10).forEach( i -> {
-                memberService.signUp(String.format("member%d@naver.com",i), "1234", "nickname"+i);
+                memberService.signUp(String.format("member%d",i), "1234", String.format("nickname%d",i));
             });
         };
     }
