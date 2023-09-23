@@ -1,10 +1,12 @@
 package com.example.jwy.Config;
 
 import com.example.jwy.Entity.Member;
+import com.example.jwy.Jwt.JwtExceptionFilter;
 import com.example.jwy.Jwt.JwtTokenFilter;
 import com.example.jwy.Jwt.JwtTokenProvider;
 import com.example.jwy.Repository.MemberRepository;
 import com.example.jwy.Service.MemberService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +46,7 @@ public class SecurityConfig {
 //                                .loginPage("/auth/login")
 //                )
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, memberRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtTokenFilter.class)
                 .build();
     }
 
