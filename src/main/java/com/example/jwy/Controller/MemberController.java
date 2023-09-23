@@ -24,6 +24,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    @GetMapping("/")
+    public String home(){
+        return "home";
+    }
+    @GetMapping("/test")
+    public String test(@AuthenticationPrincipal String email){
+
+        return String.format("test Page and email : %s",email);
+    }
     // 회원가입
     @PostMapping(value="/usr/signup")
     public ResponseDTO signup(@Valid @RequestBody SignupDTO signupDTO, BindingResult bindingResult){
@@ -48,7 +57,7 @@ public class MemberController {
 
 
     @PostMapping(value="/usr/login")
-    public ResponseDTO login(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult, @AuthenticationPrincipal String email){
+    public ResponseDTO login(@Valid @RequestBody LoginDTO loginDTO, BindingResult bindingResult){
         List<String> error_list = UserValidation.getValidationError(bindingResult);
 
         if(!error_list.isEmpty()){

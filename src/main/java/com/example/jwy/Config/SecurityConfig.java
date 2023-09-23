@@ -1,6 +1,9 @@
 package com.example.jwy.Config;
 
+import com.example.jwy.Entity.Member;
+import com.example.jwy.Jwt.JwtTokenFilter;
 import com.example.jwy.Jwt.JwtTokenProvider;
+import com.example.jwy.Repository.MemberRepository;
 import com.example.jwy.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,21 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final JwtTokenProvider jwtTokenProvider;
+    private final MemberRepository memberRepository;
+    @Bean
+        public WebSecurityCustomizer webSecurityCustomizer(){
+            return (web) -> {
+                web.ignoring().requestMatchers("/","/usr/**","/auth/**", "/swagger-ui/**","/v3/api-docs/**");
+            };
+        }
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
@@ -26,14 +39,11 @@ public class SecurityConfig {
                 .formLogin( f -> f.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic( h -> h.disable())
-                // WebSecurity 설정 방식
-                .authorizeHttpRequests(request -> request
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated())
-                .oauth2Login(
-                        oauth2Config -> oauth2Config
-                                .loginPage("/auth/login")
-                )
+//                .oauth2Login(
+//                        oauth2Config -> oauth2Config
+//                                .loginPage("/auth/login")
+//                )
+                .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, memberRepository), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

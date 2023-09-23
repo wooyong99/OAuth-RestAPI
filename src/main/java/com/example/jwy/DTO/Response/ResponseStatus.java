@@ -13,6 +13,8 @@ public enum ResponseStatus {
     UNEXPECTED_ERROR(false, HttpStatus.BAD_REQUEST.value(), "예상치 못한 에러가 발생했습니다."),
     POST_PASSWORD_INCORRECT(false, HttpStatus.BAD_REQUEST.value(), "비밀번호가 틀렸습니다."),
     LOGIN_FAIL(false, HttpStatus.BAD_REQUEST.value(), "로그인에 실패했습니다."),
+    INVALID_JWT(false, HttpStatus.BAD_REQUEST.value(), "유효하지 않은 JWT입니다."),
+    FAIL_AUTH_JWT(false, HttpStatus.BAD_REQUEST.value(), "JWT인증 실패입니다."),
     SIGNUP_DUPLI_MEMBER(false,HttpStatus.BAD_REQUEST.value(), "이미 사용중인 Email입니다.");
 
     private final boolean isSuccess;

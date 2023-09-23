@@ -63,6 +63,7 @@ public class JwtTokenProvider {
     }
 
     public String getUserEmail(String token) { return extractClaims(token, secretkey).get("user_email").toString();}
+    public String getUserPassword(String token) { return extractClaims(token, secretkey).get("password").toString();}
 
     public boolean isExpired(String token){
         Date expiredDate = extractClaims(token, secretkey).getExpiration();
