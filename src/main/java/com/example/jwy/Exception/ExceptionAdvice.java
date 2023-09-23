@@ -15,6 +15,7 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseDTO<ResponseStatus> ExceptionHandle(Exception exception){
+        exception.printStackTrace();
         return new ResponseDTO<>(ResponseStatus.UNEXPECTED_ERROR);
     }
 }

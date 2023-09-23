@@ -31,7 +31,7 @@ public class SecurityConfig {
     @Bean
         public WebSecurityCustomizer webSecurityCustomizer(){
             return (web) -> {
-                web.ignoring().requestMatchers("/","/usr/**","/auth/**", "/swagger-ui/**","/v3/api-docs/**");
+                web.ignoring().requestMatchers("/","/usr/**","/auth/kakao/login", "/swagger-ui/**","/v3/api-docs/**");
             };
         }
     @Bean
@@ -41,10 +41,10 @@ public class SecurityConfig {
                 .formLogin( f -> f.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic( h -> h.disable())
-//                .oauth2Login(
-//                        oauth2Config -> oauth2Config
-//                                .loginPage("/auth/login")
-//                )
+                .oauth2Login(
+                                        oauth2Config -> oauth2Config
+                                                .loginPage("/auth/login")
+                                )
                 .addFilterBefore(new JwtTokenFilter(jwtTokenProvider, memberRepository), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JwtExceptionFilter(), JwtTokenFilter.class)
                 .build();

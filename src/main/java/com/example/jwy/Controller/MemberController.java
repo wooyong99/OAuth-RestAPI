@@ -5,18 +5,26 @@ import com.example.jwy.DTO.Response.ResponseDTO;
 import com.example.jwy.DTO.Response.ResponseStatus;
 import com.example.jwy.DTO.SignupDTO;
 import com.example.jwy.Entity.Member;
+import com.example.jwy.Exception.BaseException;
 import com.example.jwy.Service.MemberService;
 import com.example.jwy.Util.UserValidation;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -24,6 +32,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    @Value("${kakao.authorization-uri}")
+    private String authorization_uri;
+    @Value("${kakao.redirect-uri}")
+    private String redirect_uri;
+    @Value("${kakao.client-id}")
+    private String client_id;
+    @Value("${kakao.response-type}")
+    private String response_type;
     @GetMapping("/")
     public String home(){
         return "home";
@@ -68,5 +84,11 @@ public class MemberController {
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
 
         return new ResponseDTO(token);
+    }
+
+    @GetMapping(value = "/auth/kakao/login")
+    public void oauthKaKaoLogin(HttpServletResponse response) throws IOException {
+        response.sendRedirect(String.format("%s?client_id=%s&redirect_uri=%s&response_type=%s",
+                authorization_uri,client_id,redirect_uri,response_type));
     }
 }
