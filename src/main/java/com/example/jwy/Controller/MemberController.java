@@ -54,9 +54,10 @@ public class MemberController {
         if(!error_list.isEmpty()){
             return new ResponseDTO(error_list);
         }
-        Member member = memberService.login(loginDTO);
+        String token = memberService.login(loginDTO);
         // Security Context에 저장된 사용자 확인
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-        return new ResponseDTO(member);
+
+        return new ResponseDTO(token);
     }
 }
